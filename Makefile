@@ -28,7 +28,7 @@ checkout-branch: ## Checkout to the branch
 	git pull origin $$BRANCH_NAME
 
 add-file: checkout-branch
-	echo "xyz" > newfile
+	echo "123" > newfile
 
 publish-files: add-file
 	git add .
