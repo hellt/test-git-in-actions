@@ -9,6 +9,7 @@ checkout-branch: ## Checkout to the branch
 	test -n "$(BRANCH_NAME)" || (echo "BRANCH_NAME is not set"; exit 1)
 
 	set +e
+	git fetch --all
 	git checkout $$BRANCH_NAME
 	if [ $$? -eq 1 ];
 	then
@@ -24,7 +25,6 @@ checkout-branch: ## Checkout to the branch
 	fi
 	
 	set -e
-	git fetch --all
 	git checkout $$BRANCH_NAME
 	git pull origin $$BRANCH_NAME
 
