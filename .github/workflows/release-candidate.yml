@@ -1,6 +1,6 @@
 name: Release new candidate version
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       branch_name:
@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Set env vars
         run: |
           echo "BRANCH_NAME=${{ inputs.branch_name }}" >> $GITHUB_ENV
