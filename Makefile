@@ -10,6 +10,7 @@ GO_PKG_NAME=github.com/srl-labs/ygotsrl
 .ONESHELL:
 
 checkout-branch: ## Checkout to the branch
+	@test -n "$(BRANCH_NAME)" || (echo 'BRANCH_NAME is not set.' && exit 1)
 	git checkout $$BRANCH_NAME
 	if [ $$? -eq 1 ];
 	then
