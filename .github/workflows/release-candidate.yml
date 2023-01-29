@@ -1,6 +1,6 @@
 name: Release new candidate version
 
-"on":
+on:
   workflow_dispatch:
     inputs:
       branch_name:
