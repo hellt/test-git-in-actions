@@ -27,7 +27,7 @@ checkout-branch: ## Checkout to the branch
 	git checkout $$BRANCH_NAME
 
 add-file: checkout-branch
-	echo "abc" > newfile
+	echo "def" > newfile
 
 publish-files: add-file
 	git add .
