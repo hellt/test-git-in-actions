@@ -1,0 +1,56 @@
+name: Release new candidate version
+
+"on":
+  workflow_dispatch:
+    inputs:
+      ygot_version:
+        description: "ygot version (vX.Y.Z). Defaults to v0.24.4"
+        required: false
+        type: string
+      srlinux_version:
+        description: "srlinux release (vYY.M.A)"
+        required: true
+        type: string
+      release_suffix:
+        description: "package release suffix that appends to the SR Linux version. E.g. 22.11.1-rc1. Defaults to rc1"
+        required: false
+        type: string
+        default: "rc1"
+env:
+  GOVER: 1.18.4
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GOVER }}
+
+      - name: Set env vars
+        run: |
+          echo "YGOT_VERSION=${{ inputs.ygot_version }}" >> $GITHUB_ENV
+          echo "SRLINUX_VERSION=${{ inputs.srlinux_version }}" >> $GITHUB_ENV
+
+      - name: Install ygot
+        run: |
+          make install-ygot
+
+      - name: tag major and minor versions
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          go mod tidy
+          git add go.mod
+          git add go.sum
+          git add ygotsrl.go
+          git commit -m "Release ${{ env.SRLINUX_VERSION }}"
+          git push 
+          git tag -d ${{ env.SRLINUX_VERSION }}-${{ inputs.release_suffix }} || true
+          git push origin :${{ env.SRLINUX_VERSION }}-${{ inputs.release_suffix }} || true
+          git tag -a ${{ env.SRLINUX_VERSION }}-${{ inputs.release_suffix }} -m "Release ${{ env.SRLINUX_VERSION }}"
+          git push origin ${{ env.SRLINUX_VERSION }}-${{ inputs.release_suffix }}
+        working-directory: work
