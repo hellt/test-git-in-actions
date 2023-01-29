@@ -1,16 +1,11 @@
 .DEFAULT_GOAL := help
 
-YGOT_VERSION ?= v0.24.4
-WORKDIR = work
-OUTDIR = output
-GO_PKG_NAME=github.com/srl-labs/ygotsrl
-
 ## ONESHELL makes Make to use singe shell sessions for command lines defined in targets.
 ## We use it here to inline bash scripts, like in remove-invert-match target
 .ONESHELL:
 
 checkout-branch: ## Checkout to the branch
-	@test -n "$(BRANCH_NAME)" || (echo 'BRANCH_NAME is not set.' && exit 1)
+	@test -n "$(BRANCH_NAME)" || ($(error BRANCH_NAME is not set))
 	git checkout $$BRANCH_NAME
 	if [ $$? -eq 1 ];
 	then
