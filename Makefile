@@ -29,5 +29,11 @@ checkout-branch: ## Checkout to the branch
 add-file: checkout-branch
 	echo "abc" > newfile
 
+publish-files: add-file
+	git add .
+	git commit -a -m "added ${BRANCH_NAME} files"
+	git push -u origin ${BRANCH_NAME}
+
+
 help: # Yeah, it's not mine - https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
