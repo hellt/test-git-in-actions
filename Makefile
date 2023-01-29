@@ -5,7 +5,10 @@
 .ONESHELL:
 
 checkout-branch: ## Checkout to the branch
-	@test -n "$(BRANCH_NAME)" || ($(error BRANCH_NAME is not set))
+	set -e
+	test -n "$(BRANCH_NAME)" || (echo "BRANCH_NAME is not set"; exit 1)
+
+	set +e
 	git checkout $$BRANCH_NAME
 	if [ $$? -eq 1 ];
 	then
