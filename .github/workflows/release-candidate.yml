@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      # add `actions`` git user credentials
+      - uses: fregante/setup-git-user@v1
 
       - name: Set env vars
         run: |
