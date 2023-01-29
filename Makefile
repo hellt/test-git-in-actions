@@ -24,6 +24,7 @@ checkout-branch: ## Checkout to the branch
 	fi
 	
 	set -e
+	git fetch --all
 	git checkout $$BRANCH_NAME
 	git pull origin $$BRANCH_NAME
 
