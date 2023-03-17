@@ -1,10 +1,10 @@
 ---
-name: fyml
+name: cicd-matrix
 "on":
   workflow_dispatch:
 
 jobs:
-  matrix_prep:
+  prepare-matrix:
     runs-on: ubuntu-22.04
     outputs:
       matrix: ${{ steps.matrix.outputs.output }}
@@ -16,11 +16,29 @@ jobs:
           input: ".github/workflows/matrix.yml"
           from: "yaml"
           to: "json"
-  test-matrix-from-json:
-    runs-on: ubuntu-22.04
-    needs: [matrix_prep]
+
+  test:
+    runs-on: ${{ matrix.runs-on }}
+    needs: [prepare-matrix]
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.matrix_prep.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core-version }}
+
+      - name: ghcr.io login
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Test
+        run: ./run.sh ci-test
