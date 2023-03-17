@@ -1,5 +1,5 @@
 ---
-name: fjson
+name: fyml
 "on":
   workflow_dispatch:
 
