@@ -8,35 +8,113 @@ on:
       - "v*"
   pull_request:
   workflow_dispatch:
-    inputs:
-      py_version:
-        description: "Python version"
-        type: string
-        default: 3.7
-        required: true
-      ansible-core_version:
-        description: "Ansible core version"
-        type: string
-        required: true
-        default: 2.13.8
+    # inputs:
+    #   py_version:
+    #     description: "Python version"
+    #     type: string
+    #     default: 3.7
+    #     required: true
+    #   ansible-core_version:
+    #     description: "Ansible core version"
+    #     type: string
+    #     required: true
+    #     default: 2.13.8
 
+# test supported python version
+# as per https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#node-requirement-summary
 jobs:
-  test:
+  test-py3_5:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        py_version: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
+        ansible-core_version: ["2.11.11"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.5"
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core_version }}
+
+  test-py3_6:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible-core_version: ["2.11.11"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.6"
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core_version }}
+
+  test-py3_7:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible-core_version: ["2.11.11"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.7"
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core_version }}
+
+  test-py3_8:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible-core_version: ["2.11.11", "2.12.10", "2.13.8"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.7"
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core_version }}
+
+  test-py3_9:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
         ansible-core_version: ["2.11.11", "2.12.10", "2.13.8", "2.14.3"]
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.py_version }}
+          python-version: "3.7"
 
       - name: Install ansible core
         run: pip install ansible-core==${{ matrix.ansible-core_version }}
 
-#       - name: Test
-#         run: make test
+  test-py3_10:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible-core_version: ["2.11.11", "2.12.10", "2.13.8", "2.14.3"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.7"
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core_version }}
