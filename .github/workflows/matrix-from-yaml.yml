@@ -1,0 +1,26 @@
+---
+name: fjson
+"on":
+  workflow_dispatch:
+
+jobs:
+  matrix_prep:
+    runs-on: ubuntu-22.04
+    outputs:
+      matrix: ${{ steps.matrix.outputs.output }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: fabasoad/data-format-converter-action@main
+        id: matrix
+        with:
+          input: ".github/workflows/matrix.yml"
+          from: "yaml"
+          to: "json"
+  test-matrix-from-json:
+    runs-on: ubuntu-22.04
+    needs: [matrix_prep]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix_prep.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v3
