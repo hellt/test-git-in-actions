@@ -24,6 +24,7 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     strategy:
+      fail-fast: false
       matrix:
         py_version: ["3.8", "3.9", "3.10", "3.11"]
         ansible-core_version: ["2.11.11", "2.12.10", "2.13.8", "2.14.3"]
