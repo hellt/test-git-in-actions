@@ -1,5 +1,5 @@
 ---
-name: fJson
+name: CICD
 "on":
   #  push:
   #    branches:
@@ -17,6 +17,7 @@ jobs:
       # - run: echo '${{ fromJson(env.PACKAGE_JSON).version }}'
   test-matrix-from-json:
     runs-on: ubuntu-22.04
+    needs: [prepare-matrix]
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(env.MATRIX) }}
