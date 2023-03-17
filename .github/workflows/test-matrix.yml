@@ -24,7 +24,7 @@ on:
 # as per https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#node-requirement-summary
 jobs:
   test-py3_5:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -40,7 +40,7 @@ jobs:
         run: pip install ansible-core==${{ matrix.ansible-core_version }}
 
   test-py3_6:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
