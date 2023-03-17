@@ -1,25 +1,23 @@
 ---
 name: fjson
 "on":
-  #  push:
-  #    branches:
-  #      - main
-  #    tags:
-  #      - "v*"
-  #  pull_request:
   workflow_dispatch:
 
 jobs:
-  prepare-matrix:
+  matrix_prep:
     runs-on: ubuntu-22.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - run: echo "MATRIX=$(jq -c . < matrix.json)" >> $GITHUB_ENV
+      - uses: actions/checkout@v3
+      - id: set-matrix
+        run: echo "matrix=$(jq -c . < matrix.json)" >> $GITHUB_OUTPUT
       # - run: echo '${{ fromJson(env.PACKAGE_JSON).version }}'
   test-matrix-from-json:
     runs-on: ubuntu-22.04
     needs: [prepare-matrix]
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(env.MATRIX) }}
+      matrix: ${{ fromJson(needs.matrix_prep.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v3
