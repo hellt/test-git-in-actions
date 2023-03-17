@@ -1,0 +1,24 @@
+---
+name: CICD
+"on":
+  #  push:
+  #    branches:
+  #      - main
+  #    tags:
+  #      - "v*"
+  #  pull_request:
+  workflow_dispatch:
+
+jobs:
+  prepare-matrix:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "MATRIX=$(jq -c . < matrix.json)" >> $GITHUB_ENV
+      # - run: echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+  test-matrix-from-json:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(env.MATRIX) }}
+    steps:
+      - uses: actions/checkout@v3
