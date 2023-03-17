@@ -1,0 +1,41 @@
+---
+name: CICD
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      py_version:
+        description: "Python version"
+        type: string
+        default: 3.7
+        required: true
+      ansible-core_version:
+        description: "Ansible core version"
+        type: string
+        required: true
+        default: 2.13.8
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        py_version: [3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11]
+        ansible-core_version: [2.11.11, 2.12.10, 2.13.8, 2.14.3]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.py_version }}
+
+      - name: Install ansible core
+        run: pip install ansible-core==${{ matrix.ansible-core_version }}
+
+#       - name: Test
+#         run: make test
